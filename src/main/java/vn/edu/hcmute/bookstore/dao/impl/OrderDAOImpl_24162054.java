@@ -25,7 +25,7 @@ public class OrderDAOImpl_24162054 implements OrderDAO_24162054 {
                 + "total_amount DECIMAL(10,2) NOT NULL, "
                 + "payment_method VARCHAR(50) NOT NULL DEFAULT 'COD', "
                 + "payment_status VARCHAR(50) NOT NULL DEFAULT 'PENDING', "
-                + "order_status VARCHAR(50) NOT NULL DEFAULT 'PENDING', "
+                + "order_status VARCHAR(50) NOT NULL DEFAULT 'Đơn hàng mới', "
                 + "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, "
                 + "CONSTRAINT fk_orders_user FOREIGN KEY(user_id) REFERENCES users(id)"
                 + ")";
@@ -102,7 +102,7 @@ public class OrderDAOImpl_24162054 implements OrderDAO_24162054 {
                 orderStmt.setBigDecimal(6, order.getTotalAmount());
                 orderStmt.setString(7, order.getPaymentMethod() != null ? order.getPaymentMethod() : "COD");
                 orderStmt.setString(8, order.getPaymentStatus() != null ? order.getPaymentStatus() : "PENDING");
-                orderStmt.setString(9, order.getOrderStatus() != null ? order.getOrderStatus() : "PENDING");
+                orderStmt.setString(9, order.getOrderStatus() != null ? order.getOrderStatus() : Order_24162054.STATUS_NEW);
 
                 orderStmt.executeUpdate();
 
@@ -189,6 +189,23 @@ public class OrderDAOImpl_24162054 implements OrderDAO_24162054 {
             throw new IllegalStateException(e);
         }
         return list;
+    }
+
+    @Override
+    public List<Order_24162054> findByUserIdAndStatus(int userId, String status) {
+        if (status == null || status.isBlank() || "all".equalsIgnoreCase(status) || "tất cả".equalsIgnoreCase(status) || "tat ca".equalsIgnoreCase(status)) {
+            return findByUserId(userId);
+        }
+
+        String targetNormalized = Order_24162054.normalizeStatus(status);
+        List<Order_24162054> all = findByUserId(userId);
+        List<Order_24162054> filtered = new ArrayList<>();
+        for (Order_24162054 o : all) {
+            if (o.getStatusDisplayName().equalsIgnoreCase(targetNormalized) || o.getOrderStatus().equalsIgnoreCase(status.trim())) {
+                filtered.add(o);
+            }
+        }
+        return filtered;
     }
 
     @Override

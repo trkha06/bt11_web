@@ -33,10 +33,10 @@
                             </c:if>
 
                             <div class="col-sm-4 text-muted">Phương thức thanh toán:</div>
-                            <div class="col-sm-8"><span class="badge bg-primary">COD (Thanh toán khi nhận hàng)</span></div>
+                            <div class="col-sm-8"><span class="badge bg-light text-dark border">COD (Thanh toán khi nhận hàng)</span></div>
 
                             <div class="col-sm-4 text-muted">Trạng thái đơn hàng:</div>
-                            <div class="col-sm-8"><span class="badge bg-warning text-dark">Đang xử lý</span></div>
+                            <div class="col-sm-8"><span class="badge ${order.statusBadgeClass} px-2 py-1"><c:out value="${order.statusDisplayName}"/></span></div>
 
                             <div class="col-sm-4 text-muted">Thời gian đặt:</div>
                             <div class="col-sm-8">${order.createdAt}</div>

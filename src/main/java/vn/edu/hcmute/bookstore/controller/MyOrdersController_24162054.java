@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import vn.edu.hcmute.bookstore.model.Order_24162054;
 import vn.edu.hcmute.bookstore.model.User_24162054;
 import vn.edu.hcmute.bookstore.service.OrderService_24162054;
@@ -42,9 +43,24 @@ public class MyOrdersController_24162054 extends HttpServlet {
             return;
         }
 
-        // List user's orders
-        List<Order_24162054> orders = orderService.getOrdersByUser(user.getId());
+        // Filter orders by status
+        String statusParam = ControllerUtil_24162054.clean(request.getParameter("status"));
+        String selectedStatus = statusParam.isBlank() ? "Tất cả" : Order_24162054.normalizeStatus(statusParam);
+        if ("all".equalsIgnoreCase(statusParam) || "tat ca".equalsIgnoreCase(statusParam) || "tất cả".equalsIgnoreCase(statusParam)) {
+            selectedStatus = "Tất cả";
+        }
+
+        List<Order_24162054> orders = "Tất cả".equals(selectedStatus)
+                ? orderService.getOrdersByUser(user.getId())
+                : orderService.getOrdersByUserAndStatus(user.getId(), selectedStatus);
+
+        Map<String, Integer> statusCounts = orderService.getStatusCounts(user.getId());
+
         request.setAttribute("orders", orders);
+        request.setAttribute("statusCounts", statusCounts);
+        request.setAttribute("selectedStatus", selectedStatus);
+        request.setAttribute("allStatuses", Order_24162054.ALL_STATUSES);
+
         request.getRequestDispatcher("/views/order/my-orders.jsp").forward(request, response);
     }
 }

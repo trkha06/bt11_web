@@ -33,7 +33,7 @@ CREATE TABLE orders (
   total_amount DECIMAL(10,2) NOT NULL,
   payment_method VARCHAR(50) NOT NULL DEFAULT 'COD',
   payment_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
-  order_status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+  order_status VARCHAR(50) NOT NULL DEFAULT 'Đơn hàng mới',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_orders_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -77,9 +77,25 @@ INSERT INTO book_author VALUES (1,1),(2,1),(3,1),(13,1),(4,2),(5,3),(6,3),(7,4),
 INSERT INTO rating(userid,bookid,rating,review_text) VALUES
 (2,1,5,'Sach rat hay va day cam xuc.'),(3,1,4,'Noi dung gan gui.'),(2,4,5,'Sach thieu nhi kinh dien.'),(4,5,5,'The gioi phep thuat tuyet voi.'),(3,9,4,'Van phong rat dac biet.'),(2,11,5,'Tao dong luc rat tot.');
 
--- Sample orders
+-- Sample orders covering 8 statuses for testing filter functionality
 INSERT INTO orders(id,user_id,recipient_name,recipient_phone,recipient_address,note,total_amount,payment_method,payment_status,order_status,created_at) VALUES
-(1,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Giao gio hanh chinh',157.00,'COD','PENDING','PENDING',NOW());
+(1,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Giao gio hanh chinh',157.00,'COD','PENDING','Đơn hàng mới',DATE_SUB(NOW(), INTERVAL 7 DAY)),
+(2,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Goi truoc khi giao',90.00,'COD','PENDING','Đã xác nhận',DATE_SUB(NOW(), INTERVAL 6 DAY)),
+(3,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Dong goi can than',45.00,'COD','PENDING','Chuẩn bị hàng',DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(4,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Giao buoi sang',120.00,'COD','PENDING','Vận chuyển',DATE_SUB(NOW(), INTERVAL 4 DAY)),
+(5,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Giao tang 3',125.00,'COD','PENDING','Giao hàng',DATE_SUB(NOW(), INTERVAL 3 DAY)),
+(6,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Da nhan sach',105.00,'COD','PAID','Đã giao',DATE_SUB(NOW(), INTERVAL 2 DAY)),
+(7,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Khach doi y',110.00,'COD','CANCELLED','Đơn hàng hủy',DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(8,2,'Nguyen Van A','0934567890','1 Vo Van Ngan, Thu Duc, TP.HCM','Sach loi bia',130.00,'COD','REFUNDED','Đơn hàng hoàn',NOW());
+
 INSERT INTO order_details(order_id,book_id,quantity,unit_price,total_price) VALUES
 (1,1,1,85.00,85.00),
-(1,2,1,72.00,72.00);
+(1,2,1,72.00,72.00),
+(2,3,1,90.00,90.00),
+(3,4,1,45.00,45.00),
+(4,5,1,120.00,120.00),
+(5,6,1,125.00,125.00),
+(6,7,1,55.00,55.00),
+(6,8,1,50.00,50.00),
+(7,9,1,110.00,110.00),
+(8,10,1,130.00,130.00);

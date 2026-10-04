@@ -9,5 +9,6 @@ public interface OrderDAO_24162054 {
     int createOrder(Order_24162054 order, List<OrderDetail_24162054> items) throws SQLException;
     Order_24162054 findById(int id);
     List<Order_24162054> findByUserId(int userId);
+    List<Order_24162054> findByUserIdAndStatus(int userId, String status);
     List<OrderDetail_24162054> findDetailsByOrderId(int orderId);
 }

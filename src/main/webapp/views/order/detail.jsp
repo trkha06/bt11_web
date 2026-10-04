@@ -87,9 +87,9 @@
                         <p class="mb-2"><strong>Ghi chú:</strong> <c:out value="${order.note}"/></p>
                     </c:if>
                     <hr>
-                    <p class="mb-2"><strong>Hình thức TT:</strong> <span class="badge bg-info text-dark">${order.paymentMethod} (COD)</span></p>
+                    <p class="mb-2"><strong>Hình thức TT:</strong> <span class="badge bg-light text-dark border">${order.paymentMethod} (COD)</span></p>
                     <p class="mb-2"><strong>Thanh toán:</strong> <span class="badge bg-secondary">${order.paymentStatus}</span></p>
-                    <p class="mb-0"><strong>Trạng thái:</strong> <span class="badge bg-warning text-dark">${order.orderStatus}</span></p>
+                    <p class="mb-0"><strong>Trạng thái:</strong> <span class="badge ${order.statusBadgeClass} px-2 py-1"><c:out value="${order.statusDisplayName}"/></span></p>
                 </div>
             </div>
         </div>
